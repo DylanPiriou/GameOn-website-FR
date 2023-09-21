@@ -30,6 +30,21 @@ img {
   padding-right: 1rem;
 }
 
+/* confirm message when form is submitted */
+.confirm-message{
+  position: fixed;
+  right: 15px;
+  top: 15px;
+  padding: 5px 15px;
+  background: #ff0000;
+  border-radius: 15px;
+  display: none;
+}
+
+.confirm-message p{
+  color: white;
+}
+
 .topnav {
   overflow: hidden;
   margin: 3.5%;
