@@ -32,10 +32,12 @@ function closeModal() {
 // launch form event
 btnSubmit.addEventListener("click", (e) => {
   e.preventDefault();
-  closeModal();
-  setTimeout(() => {
-    handleDisplayMessage();
-  }, 300);
+  if(validate()){
+    closeModal();
+    setTimeout(() => {
+      handleDisplayMessage();
+    }, 300);
+  }
 });
 
 // display confirm message when form is submitted
@@ -48,49 +50,66 @@ function handleDisplayMessage() {
 
 // get inputs value
 const inputs = document.querySelectorAll("input")
-const firstMessage = document.querySelector(".message-first");
-const lastMessage = document.querySelector(".message-last");
-const emailMessage = document.querySelector(".message-email");
-const birthMessage = document.querySelector(".message-birthdate")
-const locationMessage = document.querySelector(".message-location")
-const termsMessage = document.querySelector(".message-terms")
+const firstMessage = document.getElementById("first-message")
+const lastMessage = document.getElementById("last-message")
+const emailMessage = document.getElementById("email-message")
+const birthMessage = document.getElementById("birthdate-message")
+const quantityMessage = document.getElementById("quantity-message")
+const locationMessage = document.getElementById("location-message")
+const termsMessage = document.getElementById("terms-message")
 const checkboxes = document.querySelectorAll(".checkbox-input")
+
 formData.forEach(input => {
-  input.addEventListener("change", handleChange)
+  input.addEventListener("input", handleChange)
 })
 
 // conditional logic for inputs on change
 function handleChange(e) {
-  const value = e.target.value;
-  const id = e.target.id
+  const { value, id } = e.target;
+  const el = e.target;
+  let isValid = true;
 
   switch (id) {
     case "first":
-      if (value.length >= 2) {
-        handleFormMessage(firstMessage, "Parfait !", "green");
-      } else {
+      if (value.length < 2) {
         handleFormMessage(firstMessage, "Pas assez long. Veuillez entrer 2 caractères ou plus.", "red");
+        isValid = false;
+      } else {
+        handleFormMessage(firstMessage, "");
       }
       break;
     case "last":
       if (value.length >= 2) {
-        handleFormMessage(lastMessage, "Parfait !", "green");
+        handleFormMessage(lastMessage, "");
       } else {
         handleFormMessage(lastMessage, "Pas assez long. Veuillez entrer 2 caractères ou plus.", "red");
+        isValid = false;
       }
       break;
     case "email":
       const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
       if (emailPattern.test(value)) {
-        handleFormMessage(emailMessage, "Parfait !", "green");
+        handleFormMessage(emailMessage, "");
       } else {
-        handleFormMessage(emailMessage, "Veuillez entrer un email valide.", "red");
+        handleFormMessage(emailMessage, "Veuillez entrer une adresse email valide.", "red");
+        isValid = false;
       }
+      break;
     case "birthdate":
       if (value) {
-        handleFormMessage(birthMessage, "Parfait !", "green");
+        handleFormMessage(birthMessage, "");
       } else {
         handleFormMessage(birthMessage, "Veuillez entrer une date", "red");
+        isValid = false;
+      }
+      break;
+    case "quantity":
+      const quantityValue = parseInt(value, 10);
+      if (isNaN(quantityValue) || quantityValue < 0 || quantityValue > 99) {
+        handleFormMessage(quantityMessage, "La valeur doit être un nombre entre 0 et 99", "red");
+        isValid = false;
+      } else {
+        handleFormMessage(quantityMessage, "");
       }
       break;
     case "location1":
@@ -99,19 +118,29 @@ function handleChange(e) {
     case "location4":
       const isOneRadioSelected = isAtLeastOneRadioSelected();
       if (isOneRadioSelected) {
-        handleFormMessage(locationMessage, "Excellent choix !", "green");
+        handleFormMessage(locationMessage, "");
       } else {
         handleFormMessage(locationMessage, "Vous devez choisir une option", "red");
+        isValid = false;
       }
       break;
     case "checkbox1":
       if (checkbox1.checked) {
-        handleFormMessage(termsMessage, "Parfait !", "green");
+        handleFormMessage(termsMessage, "");
       } else {
         handleFormMessage(termsMessage, "Vous devez accepter les termes et conditions", "red");
+        isValid = false;
       }
+      break;
+  }
+
+  if (isValid) {
+    handleStyleInput(el, "");
+  } else {
+    handleStyleInput(el, "red");
   }
 }
+
 
 // check if at least one radio button is selected
 function isAtLeastOneRadioSelected() {
@@ -130,7 +159,50 @@ function handleFormMessage(el, txt, color) {
   el.style.color = color;
 }
 
+function handleStyleInput(el, color) {
+  el.style.outline = `1px solid ${color}`
+}
 
+// final check before submit
+function validate() {
+  const errorMessages = document.querySelectorAll(".input-message");
+  errorMessages.forEach(message => {
+    message.textContent = "";
+  });
 
+  const formFields = document.querySelectorAll("input[type='text'], input[type='email'], input[type='date'], input[type='number'], input[type='radio'], input[type='checkbox']");
+
+  let isValid = true;
+
+  // loop in form fields
+  formFields.forEach(field => {
+    if (field.type === "radio") {
+      const radioName = field.name;
+      const radioButtons = document.querySelectorAll(`input[name='${radioName}']`);
+      const isAnyRadioButtonChecked = Array.from(radioButtons).some(button => button.checked);
+
+      if (!isAnyRadioButtonChecked) {
+        const errorMessage = document.getElementById(`${radioName}-message`);
+        handleFormMessage(errorMessage,"Vous devez choisir une option.", "red")
+        handleStyleInput(field, "red")
+        isValid = false;
+      }
+    } else if (field.type === "checkbox") {
+      if (field.id === "checkbox1" && !field.checked) {
+        const errorMessage = document.getElementById(`terms-message`);
+        handleFormMessage(errorMessage,"Vous devez accepter les conditions d'utilisation.", "red")
+        handleStyleInput(field, "red")
+        isValid = false;
+      }
+    } else if (!field.value.trim()) {
+      const errorMessage = document.getElementById(`${field.id}-message`);
+      handleFormMessage(errorMessage,"Ce champ doit être remplis.", "red")
+      handleStyleInput(field, "red")
+      isValid = false;
+    }
+  });
+
+  return isValid;
+}
 
 
