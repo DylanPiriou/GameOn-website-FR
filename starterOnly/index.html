@@ -20,11 +20,11 @@
     </div>
     <div class="main-navbar">
 
-      <a href="#" class="active"><span>Accueil</span></a>
-      <a href="#"><span>Détails de l'évènement</span></a>
-      <a href="#"><span>À propos</span></a>
-      <a href="#"><span>Contact</span></a>
-      <a href="#"><span>Évènements passés</span></a>
+      <a href="#" class="link active"><span>Accueil</span></a>
+      <a href="#" class="link"><span>Détails de l'évènement</span></a>
+      <a href="#" class="link"><span>À propos</span></a>
+      <a href="#" class="link"><span>Contact</span></a>
+      <a href="#" class="link"><span>Évènements passés</span></a>
       <a href="javascript:void(0);" class="icon" onclick="editNav()">
         <i class="fa fa-bars"></i>
       </a>
@@ -57,6 +57,10 @@
     <div class="bground">
       <div class="content">
         <span class="close"></span>
+        <div class="final-step">
+          <p class="final-step__txt">Merci pour votre inscription</p>
+          <button class="final-step__btn">Fermer</button>
+        </div>
         <div class="modal-body">
           <form name="reserve" action="index.html" method="get" onsubmit="return validate();">
             <div class="formData">

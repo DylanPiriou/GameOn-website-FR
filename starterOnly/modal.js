@@ -12,6 +12,7 @@ const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const closeBtn = document.querySelector(".close");
+const closeBtnFinalStep = document.querySelector(".final-step__btn");
 const btnSubmit = document.querySelector(".btn-submit");
 const confirmMessage = document.querySelector(".confirm-message");
 const firstMessage = document.getElementById("first-message");
@@ -25,6 +26,8 @@ const checkboxes = document.querySelectorAll(".checkbox-input");
 const errorMessages = document.querySelectorAll(".input-message");
 const radioButtons = document.querySelectorAll('input[name="location"]');
 const formFields = document.querySelectorAll("input[type='text'], input[type='email'], input[type='date'], input[type='number'], input[type='radio'], input[type='checkbox']");
+const finalStep = document.querySelector(".final-step");
+
 
 // function to check if at least one radio button is selected
 function isAtLeastOneRadioSelected() {
@@ -48,11 +51,8 @@ function handleStyleInput(el, color) {
 }
 
 // display confirm message when form is submitted
-function handleDisplayMessage() {
-  confirmMessage.style.display = "block";
-  setTimeout(() => {
-    confirmMessage.style.display = "none";
-  }, 3000);
+function handleDisplayMessage(style) {
+  finalStep.style.display = style;
 }
 
 // function to reset all inputs value and err messages
@@ -80,12 +80,13 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
-
 // close modal event
 closeBtn.addEventListener("click", closeModal);
+closeBtnFinalStep.addEventListener("click", closeModal);
 // close modal form
 function closeModal() {
   modalbg.style.display = "none";
+  handleDisplayMessage("none");
   resetForm();
 }
 
@@ -93,10 +94,7 @@ function closeModal() {
 btnSubmit.addEventListener("click", (e) => {
   e.preventDefault();
   if (validate()) {
-    closeModal();
-    setTimeout(() => {
-      handleDisplayMessage();
-    }, 300);
+    handleDisplayMessage("flex");
   }
 });
 
