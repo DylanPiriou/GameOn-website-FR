@@ -11,34 +11,41 @@ function editNav() {
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-const closeBtn = document.querySelector(".close")
-const btnSubmit = document.querySelector(".btn-submit")
+const closeBtn = document.querySelector(".close");
+const btnSubmit = document.querySelector(".btn-submit");
 const confirmMessage = document.querySelector(".confirm-message");
+const firstMessage = document.getElementById("first-message");
+const lastMessage = document.getElementById("last-message");
+const emailMessage = document.getElementById("email-message");
+const birthMessage = document.getElementById("birthdate-message");
+const quantityMessage = document.getElementById("quantity-message");
+const locationMessage = document.getElementById("location-message");
+const termsMessage = document.getElementById("terms-message");
+const checkboxes = document.querySelectorAll(".checkbox-input");
+const errorMessages = document.querySelectorAll(".input-message");
+const radioButtons = document.querySelectorAll('input[name="location"]');
+const formFields = document.querySelectorAll("input[type='text'], input[type='email'], input[type='date'], input[type='number'], input[type='radio'], input[type='checkbox']");
 
-// launch modal event
-modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
-// launch modal form
-function launchModal() {
-  modalbg.style.display = "block";
-}
-
-// close modal event
-closeBtn.addEventListener("click", closeModal);
-// close modal form
-function closeModal() {
-  modalbg.style.display = "none";
-}
-
-// launch form event
-btnSubmit.addEventListener("click", (e) => {
-  e.preventDefault();
-  if(validate()){
-    closeModal();
-    setTimeout(() => {
-      handleDisplayMessage();
-    }, 300);
+// function to check if at least one radio button is selected
+function isAtLeastOneRadioSelected() {
+  for (const radioButton of radioButtons) {
+    if (radioButton.checked) {
+      return true;
+    }
   }
-});
+  return false;
+}
+
+// function to handle messages
+function handleFormMessage(el, txt, color) {
+  el.textContent = txt;
+  el.style.color = color;
+}
+
+// function to handle input style
+function handleStyleInput(el, color) {
+  el.style.outline = `1px solid ${color}`
+}
 
 // display confirm message when form is submitted
 function handleDisplayMessage() {
@@ -48,22 +55,58 @@ function handleDisplayMessage() {
   }, 3000);
 }
 
-// get inputs value
-const inputs = document.querySelectorAll("input")
-const firstMessage = document.getElementById("first-message")
-const lastMessage = document.getElementById("last-message")
-const emailMessage = document.getElementById("email-message")
-const birthMessage = document.getElementById("birthdate-message")
-const quantityMessage = document.getElementById("quantity-message")
-const locationMessage = document.getElementById("location-message")
-const termsMessage = document.getElementById("terms-message")
-const checkboxes = document.querySelectorAll(".checkbox-input")
+// function to reset all inputs value and err messages
+function resetForm() {
+  formFields.forEach(input => {
+    input.value = '';
+    handleStyleInput(input, '');
+  });
 
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = false;
+    handleStyleInput(checkbox, '');
+  });
+
+  errorMessages.forEach(message => {
+    message.textContent = '';
+  });
+
+}
+
+// launch modal event
+modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
+// launch modal form
+function launchModal() {
+  modalbg.style.display = "block";
+}
+
+
+// close modal event
+closeBtn.addEventListener("click", closeModal);
+// close modal form
+function closeModal() {
+  modalbg.style.display = "none";
+  resetForm();
+}
+
+// launch form event
+btnSubmit.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (validate()) {
+    closeModal();
+    setTimeout(() => {
+      handleDisplayMessage();
+    }, 300);
+  }
+});
+
+// event on all inputs
 formData.forEach(input => {
   input.addEventListener("input", handleChange)
 })
 
 // conditional logic for inputs on change
+const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 function handleChange(e) {
   const { value, id } = e.target;
   const el = e.target;
@@ -71,7 +114,7 @@ function handleChange(e) {
 
   switch (id) {
     case "first":
-      if (value.length < 2) {
+      if (value.trim().length < 2) {
         handleFormMessage(firstMessage, "Pas assez long. Veuillez entrer 2 caractères ou plus.", "red");
         isValid = false;
       } else {
@@ -79,7 +122,7 @@ function handleChange(e) {
       }
       break;
     case "last":
-      if (value.length >= 2) {
+      if (value.trim().length >= 2) {
         handleFormMessage(lastMessage, "");
       } else {
         handleFormMessage(lastMessage, "Pas assez long. Veuillez entrer 2 caractères ou plus.", "red");
@@ -87,7 +130,6 @@ function handleChange(e) {
       }
       break;
     case "email":
-      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
       if (emailPattern.test(value)) {
         handleFormMessage(emailMessage, "");
       } else {
@@ -128,7 +170,7 @@ function handleChange(e) {
       if (checkbox1.checked) {
         handleFormMessage(termsMessage, "");
       } else {
-        handleFormMessage(termsMessage, "Vous devez accepter les termes et conditions", "red");
+        handleFormMessage(termsMessage, "Vous devez accepter les conditions d'utilisation.", "red");
         isValid = false;
       }
       break;
@@ -141,36 +183,11 @@ function handleChange(e) {
   }
 }
 
-
-// check if at least one radio button is selected
-function isAtLeastOneRadioSelected() {
-  const radioButtons = document.querySelectorAll('input[name="location"]');
-  for (const radioButton of radioButtons) {
-    if (radioButton.checked) {
-      return true;
-    }
-  }
-  return false;
-}
-
-// function to handle conditional message
-function handleFormMessage(el, txt, color) {
-  el.textContent = txt;
-  el.style.color = color;
-}
-
-function handleStyleInput(el, color) {
-  el.style.outline = `1px solid ${color}`
-}
-
 // final check before submit
 function validate() {
-  const errorMessages = document.querySelectorAll(".input-message");
   errorMessages.forEach(message => {
     message.textContent = "";
   });
-
-  const formFields = document.querySelectorAll("input[type='text'], input[type='email'], input[type='date'], input[type='number'], input[type='radio'], input[type='checkbox']");
 
   let isValid = true;
 
@@ -183,20 +200,42 @@ function validate() {
 
       if (!isAnyRadioButtonChecked) {
         const errorMessage = document.getElementById(`${radioName}-message`);
-        handleFormMessage(errorMessage,"Vous devez choisir une option.", "red")
+        handleFormMessage(errorMessage, "Vous devez choisir une option.", "red")
         handleStyleInput(field, "red")
         isValid = false;
       }
     } else if (field.type === "checkbox") {
       if (field.id === "checkbox1" && !field.checked) {
         const errorMessage = document.getElementById(`terms-message`);
-        handleFormMessage(errorMessage,"Vous devez accepter les conditions d'utilisation.", "red")
+        handleFormMessage(errorMessage, "Vous devez accepter les conditions d'utilisation.", "red")
+        handleStyleInput(field, "red")
+        isValid = false;
+      }
+    } else if (field.type === "text") {
+      if (field.value.trim().length < 2) {
+        const errorMessage = document.getElementById(`${field.id}-message`);
+        handleFormMessage(errorMessage, "Pas assez long. Veuillez entrer 2 caractères ou plus.", "red")
+        handleStyleInput(field, "red")
+        isValid = false;
+      }
+    } else if (field.type === "email") {
+      if (!emailPattern.test(field.value)) {
+        const errorMessage = document.getElementById(`${field.id}-message`);
+        handleFormMessage(errorMessage, "Veuillez entrer une adresse email valide.", "red")
+        handleStyleInput(field, "red")
+        isValid = false;
+      }
+    } else if(field.type === "number") {
+      const quantityValue = parseInt(field.value, 10);
+      if (isNaN(quantityValue) || quantityValue < 0 || quantityValue > 99) {
+        const errorMessage = document.getElementById(`${field.id}-message`);
+        handleFormMessage(errorMessage, "La valeur doit être un nombre entre 0 et 99", "red")
         handleStyleInput(field, "red")
         isValid = false;
       }
     } else if (!field.value.trim()) {
       const errorMessage = document.getElementById(`${field.id}-message`);
-      handleFormMessage(errorMessage,"Ce champ doit être remplis.", "red")
+      handleFormMessage(errorMessage, "Ce champ doit être remplis.", "red")
       handleStyleInput(field, "red")
       isValid = false;
     }
