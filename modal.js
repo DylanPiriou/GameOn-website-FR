@@ -1,11 +1,4 @@
-function editNav() {
-  var x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }
-}
+import { handleDisplayMessage, handleFormMessage, handleStyleInput, isAtLeastOneRadioSelected } from "./utilities.js";
 
 // DOM Elements
 const modalbg = document.querySelector(".bground");
@@ -24,36 +17,7 @@ const locationMessage = document.getElementById("location-message");
 const termsMessage = document.getElementById("terms-message");
 const checkboxes = document.querySelectorAll(".checkbox-input");
 const errorMessages = document.querySelectorAll(".input-message");
-const radioButtons = document.querySelectorAll('input[name="location"]');
 const formFields = document.querySelectorAll("input[type='text'], input[type='email'], input[type='date'], input[type='number'], input[type='radio'], input[type='checkbox']");
-const finalStep = document.querySelector(".final-step");
-
-
-// function to check if at least one radio button is selected
-function isAtLeastOneRadioSelected() {
-  for (const radioButton of radioButtons) {
-    if (radioButton.checked) {
-      return true;
-    }
-  }
-  return false;
-}
-
-// function to handle messages
-function handleFormMessage(el, txt, color) {
-  el.textContent = txt;
-  el.style.color = color;
-}
-
-// function to handle input style
-function handleStyleInput(el, color) {
-  el.style.outline = `1px solid ${color}`
-}
-
-// display confirm message when form is submitted
-function handleDisplayMessage(style) {
-  finalStep.style.display = style;
-}
 
 // function to reset all inputs value and err messages
 function resetForm() {
@@ -73,17 +37,15 @@ function resetForm() {
 
 }
 
-// launch modal event
+// launch modal
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
-// launch modal form
 function launchModal() {
   modalbg.style.display = "block";
 }
 
-// close modal event
+// close modal
 closeBtn.addEventListener("click", closeModal);
 closeBtnFinalStep.addEventListener("click", closeModal);
-// close modal form
 function closeModal() {
   modalbg.style.display = "none";
   handleDisplayMessage("none");
