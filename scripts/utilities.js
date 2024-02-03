@@ -11,19 +11,19 @@ export function isAtLeastOneRadioSelected() {
 
 // function to handle messages
 export function handleFormMessage(el, txt, color) {
-  el.textContent = txt;
-  el.style.color = color;
+	el.textContent = txt;
+	el.style.color = color;
 }
 
 // function to handle input style
 export function handleStyleInput(el, color) {
-  el.style.outline = `1px solid ${color}`
+	el.style.outline = `1px solid ${color}`;
 }
 
 // display confirm message when form is submitted
 const finalStep = document.querySelector(".final-step");
+const modal = document.querySelector(".content");
 export function handleDisplayMessage(style) {
-  finalStep.style.display = style;
+	modal.style.overflow = "hidden";
+	finalStep.style.display = style;
 }
-
-

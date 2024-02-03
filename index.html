@@ -1,25 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="utf-8" />
   <title>Reservation</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="assets/modal.css" />
+  <link rel="stylesheet" href="assets/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://fonts.googleapis.com/css?family=DM+Sans" rel="stylesheet" />
 </head>
 
 <body>
-  <div class="confirm-message">
-    <p>Merci ! Votre réservation a été reçue.</p>
-  </div>
   <div class="topnav" id="myTopnav">
     <div class="header-logo">
       <img alt="logo" src="assets/imgs/Logo.png" width="auto" height="auto" />
     </div>
     <div class="main-navbar">
-
       <a href="#" class="link active"><span>Accueil</span></a>
       <a href="#" class="link"><span>Détails de l'évènement</span></a>
       <a href="#" class="link"><span>À propos</span></a>
@@ -30,7 +26,7 @@
       </a>
     </div>
   </div>
-  </div>
+
   <main>
     <div class="hero-section">
       <div class="hero-content">
@@ -62,7 +58,7 @@
           <button class="final-step__btn">Fermer</button>
         </div>
         <div class="modal-body">
-          <form name="reserve" action="index.html" method="get" onsubmit="return validate();">
+          <form name="reserve" action="index.html" method="get">
             <div class="formData">
               <label for="first">Prénom</label><br>
               <input class="text-control" type="text" id="first" name="first" minlength="2" /><br>
@@ -143,9 +139,9 @@
       Copyright 2014 - 2022, GameOn Inc.
     </p>
   </footer>
-  <script type="module" src="modal.js"></script>
-  <script type="module" src="utilities.js"></script>
-  <script type="module" src="navbar.js"></script>
+  <script type="module" src="scripts/navbar.js"></script>
+  <script type="module" src="scripts/modal.js"></script>
+  <script type="module" src="scripts/utilities.js"></script>
 </body>
 
 </html>
